@@ -269,6 +269,11 @@ func (s *Server) buildMuxer() {
 
 // publicHostMatcher matches incoming requests against the currently specified server publicHost.
 func (s *Server) publicHostMatcher(r *http.Request, rm *mux.RouteMatch) bool {
+	// Replacing Docker host with localhost
+	if strings.Contains(r.Host, "host.docker.internal") {
+		r.Host = strings.Replace(r.Host, "host.docker.internal", "localhost", 1)
+	}
+
 	if strings.Contains(s.publicHost, ":") || !strings.Contains(r.Host, ":") {
 		return r.Host == s.publicHost
 	}
