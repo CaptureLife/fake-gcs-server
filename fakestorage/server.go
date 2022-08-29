@@ -272,6 +272,8 @@ func (s *Server) publicHostMatcher(r *http.Request, rm *mux.RouteMatch) bool {
 	// Replacing Docker host with localhost
 	if strings.Contains(r.Host, "host.docker.internal") {
 		r.Host = strings.Replace(r.Host, "host.docker.internal", "localhost", 1)
+	} else if strings.Contains(r.Host, "dev.capturelife.com") {
+		r.Host = s.publicHost
 	}
 
 	if strings.Contains(s.publicHost, ":") || !strings.Contains(r.Host, ":") {
