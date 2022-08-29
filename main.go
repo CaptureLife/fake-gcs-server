@@ -55,7 +55,8 @@ func generateObjectsFromFiles(logger *logrus.Logger, folder string) ([]fakestora
 	var emptyBuckets []string
 	if files, err := os.ReadDir(folder); err == nil {
 		for _, f := range files {
-			if !f.IsDir() {
+			// Hardcoding mounted storage dir
+			if !f.IsDir() || f.Name() == "out" {
 				continue
 			}
 			bucketName := f.Name()

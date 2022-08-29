@@ -52,7 +52,7 @@ func NewStorageFS(objects []Object, rootDir string) (Storage, error) {
 		_, err = readXattr(rootDir)
 		if err != nil {
 			if xerr, ok := err.(*xattr.Error); !ok || xerr.Err != xattr.ENOATTR {
-				return nil, fmt.Errorf("failed to determine if %q supports xattr, consider using a different storage backend or a filesystem that supports it (e.g. not tmpfs on Linux): %w", rootDir, err)
+				fmt.Println("failed to determine if %q supports xattr, consider using a different storage backend or a filesystem that supports it (e.g. not tmpfs on Linux): %w", rootDir, err)
 			}
 		}
 	}

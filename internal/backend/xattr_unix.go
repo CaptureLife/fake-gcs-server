@@ -9,22 +9,32 @@ package backend
 
 import (
 	"github.com/pkg/xattr"
+	"strings"
+	"os"
 )
 
 const xattrKey = "user.metadata"
 
 func writeXattr(path string, encoded []byte) error {
-	return xattr.Set(path, xattrKey, encoded)
+	err := xattr.Set(path, xattrKey, encoded)
+	if err != nil {
+		return os.WriteFile(path + ".xattr", encoded, 0666)
+	}
+	return err
 }
 
 func readXattr(path string) ([]byte, error) {
-	return xattr.Get(path, xattrKey)
+	val, err := xattr.Get(path, xattrKey)
+	if err != nil {
+		return os.ReadFile(path + ".xattr")
+	}
+	return val, err
 }
 
 func isXattrFile(path string) bool {
-	return false
+	return strings.HasSuffix(path, ".xattr")
 }
 
 func removeXattrFile(path string) error {
-	return nil
+	return os.Remove(path + ".xattr")
 }
