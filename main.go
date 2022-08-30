@@ -83,7 +83,7 @@ func generateObjectsFromFiles(logger *logrus.Logger, folder string) ([]fakestora
 func objectsFromBucket(localBucketPath, bucketName string) ([]fakestorage.Object, error) {
 	var objects []fakestorage.Object
 	err := filepath.Walk(localBucketPath, func(path string, info os.FileInfo, _ error) error {
-		if info.Mode().IsRegular() {
+		if info.Mode().IsRegular() && info.Name() != ".DS_Store" {
 			// Rel() should never return error since path always descend from localBucketPath
 			relPath, _ := filepath.Rel(localBucketPath, path)
 			objectKey := filepath.ToSlash(relPath)
